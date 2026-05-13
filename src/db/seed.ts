@@ -77,6 +77,7 @@ const nikeProducts = [
 
 async function seed() {
   console.log("🌱 Seeding products...");
+  await db.delete(products);
   await db.insert(products).values(nikeProducts);
   console.log(`✅ Seeded ${nikeProducts.length} Nike products`);
 }
