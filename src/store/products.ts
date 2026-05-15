@@ -1,5 +1,12 @@
 import { create } from "zustand";
 
+export interface ProductColor {
+  id: number;
+  colorName: string;
+  colorHex: string;
+  imageUrl: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -8,6 +15,7 @@ export interface Product {
   imageUrl: string;
   category: string;
   createdAt: Date;
+  colors?: ProductColor[];
 }
 
 interface ProductsState {
