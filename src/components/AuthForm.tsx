@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signUp, signIn } from "@/lib/auth";
 
 type AuthFormProps = {
   mode: "sign-in" | "sign-up";
@@ -21,8 +26,56 @@ const labels = {
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const config = labels[mode];
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      
+      let result;
+      if (mode === "sign-up") {
+        result = await signUp({
+          name: formData.get("fullName"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+          confirmPassword: formData.get("confirmPassword"),
+        });
+      } else {
+        result = await signIn({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        });
+      }
+
+      if (result.success) {
+        // Redirect based on return URL or default
+        const returnUrl = new URLSearchParams(window.location.search).get("returnUrl") || "/";
+        router.push(returnUrl);
+        router.refresh();
+      } else {
+        setError(result.message || "Authentication failed");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <form className="space-y-6" action="#">
+    <form className="space-y-6" onSubmit={handleSubmit}>
+      {error && (
+        <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
+          {error}
+        </div>
+      )}
+
       {mode === "sign-up" ? (
         <div>
           <label htmlFor="full-name" className="block text-sm font-medium text-zinc-700">
@@ -34,8 +87,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
             type="text"
             autoComplete="name"
             placeholder="Enter your full name"
-            className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100"
+            className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
             required
+            disabled={isLoading}
           />
         </div>
       ) : null}
@@ -50,8 +104,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
           type="email"
           autoComplete="email"
           placeholder="name@domain.com"
-          className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100"
+          className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
           required
+          disabled={isLoading}
         />
       </div>
 
@@ -72,17 +127,38 @@ export default function AuthForm({ mode }: AuthFormProps) {
           type="password"
           autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
           placeholder="Minimum 8 characters"
-          className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100"
+          className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
           required
           minLength={8}
+          disabled={isLoading}
         />
       </div>
 
+      {mode === "sign-up" ? (
+        <div>
+          <label htmlFor="confirm-password" className="block text-sm font-medium text-zinc-700">
+            Confirm password
+          </label>
+          <input
+            id="confirm-password"
+            name="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Confirm your password"
+            className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
+            required
+            minLength={8}
+            disabled={isLoading}
+          />
+        </div>
+      ) : null}
+
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
+        disabled={isLoading}
+        className="inline-flex w-full items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {config.submit}
+        {isLoading ? "Loading..." : config.submit}
       </button>
 
       {mode === "sign-up" ? (
