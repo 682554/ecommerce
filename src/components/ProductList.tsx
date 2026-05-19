@@ -2,7 +2,7 @@
 
 import { useProductsStore } from "@/store/products";
 import type { Product } from "@/store/products";
-import { ProductCard } from "./ProductCard";
+import { Card } from "./Card";
 
 export function ProductList({ products }: { products: Product[] }) {
   const { selectedCategory, searchQuery } = useProductsStore();
@@ -28,7 +28,14 @@ export function ProductList({ products }: { products: Product[] }) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {filtered.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <Card
+          key={product.id}
+          name={product.name}
+          price={product.price}
+          imageUrl={product.imageUrl}
+          category={product.category}
+          colors={product.colors}
+        />
       ))}
     </div>
   );
