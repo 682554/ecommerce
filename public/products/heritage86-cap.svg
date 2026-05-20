@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#451a03" />
+      <stop offset="100%" stop-color="#9a3412" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)" />
+  <circle cx="946" cy="236" r="168" fill="#fff" opacity="0.08" />
+  <path d="M344 602c0-154 114-263 256-263 141 0 256 109 256 263v43H344v-43z" fill="#f3f4f6"/>
+  <path d="M384 651h474c-50 61-134 99-237 99-104 0-188-38-237-99z" fill="#e5e7eb"/>
+  <path d="M856 645c59 0 106 14 143 41-40 35-87 53-143 53H663c53-63 117-94 193-94z" fill="#d1d5db"/>
+  <text x="88" y="140" fill="#fff" font-family="Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="12">NIKE</text>
+  <text x="88" y="995" fill="#fff" font-family="Arial, sans-serif" font-size="92" font-weight="700">Heritage86 Cap</text>
+  <text x="88" y="1066" fill="#fff" opacity="0.8" font-family="Arial, sans-serif" font-size="34" letter-spacing="7">CLASSIC SIX-PANEL STAPLE</text>
+</svg>

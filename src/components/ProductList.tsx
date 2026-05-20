@@ -19,7 +19,7 @@ export function ProductList({ products }: { products: Product[] }) {
 
   if (filtered.length === 0) {
     return (
-      <p className="py-12 text-center text-zinc-500 dark:text-zinc-400">
+      <p className="py-12 text-center text-neutral-400">
         No products found.
       </p>
     );

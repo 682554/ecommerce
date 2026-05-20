@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { products } from "./schema";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: ".env.local" });
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
@@ -12,65 +12,65 @@ const nikeProducts = [
   {
     name: "Nike Air Max 90",
     description:
-      "The Nike Air Max 90 stays true to its OG running roots with the iconic Waffle outsole, stitched overlays and classic TPU accents.",
+      "The iconic silhouette with legendary style and unmatched comfort.",
     price: 130.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/AIR+MAX+90.png",
+    imageUrl: "/products/photos/air-max-90.jpg",
     category: "Shoes",
   },
   {
     name: "Nike Air Force 1 '07",
     description:
-      "The radiance lives on in the Nike Air Force 1 '07, the basketball original that puts a fresh spin on what you know best.",
+      "The basketball original that shaped the game and street culture.",
     price: 115.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/AIR+FORCE+1+07.png",
+    imageUrl: "/products/photos/air-force-1.jpg",
     category: "Shoes",
   },
   {
     name: "Nike Dunk Low Retro",
     description:
-      "Created for the hardwood but taken to the streets, the Nike Dunk Low Retro returns with crisp overlays and original team colours.",
+      "From the hardwood to the streets with timeless design.",
     price: 115.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/NIKE+DUNK+LOW+RETRO.png",
+    imageUrl: "/products/photos/dunk-low.jpg",
     category: "Shoes",
   },
   {
     name: "Nike Sportswear Tech Fleece Joggers",
     description:
-      "Slim-fitting Tech Fleece joggers engineered for lightweight warmth without extra bulk. Tapered legs give a streamlined look.",
+      "Premium comfort meets modern style with engineered fabric.",
     price: 110.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/TECH+FLEECE+JOGGERS.png",
+    imageUrl: "/products/photos/tech-fleece-joggers.jpg",
     category: "Clothing",
   },
   {
     name: "Nike Sportswear Club Fleece Hoodie",
     description:
-      "The Nike Sportswear Club Fleece Hoodie combines classic style with the soft comfort of fleece for an elevated everyday look.",
+      "Elevated everyday wear with classic Nike comfort and style.",
     price: 65.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/CLUB+FLEECE+HOODIE.png",
+    imageUrl: "/products/photos/club-fleece-hoodie.jpg",
     category: "Clothing",
   },
   {
     name: "Nike Air Zoom Pegasus 41",
     description:
-      "A responsive satisfying satisfying ride for your everyday run. Reactive ZoomX foam delivers energy return step after step.",
+      "Responsive cushioning for everyday runs and training.",
     price: 140.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/AIR+ZOOM+PEGASUS+41.png",
+    imageUrl: "/products/photos/pegasus-41.jpg",
     category: "Shoes",
   },
   {
     name: "Nike Pro Dri-FIT T-Shirt",
     description:
-      "Stay cool and dry during intense workouts with the Nike Pro Dri-FIT T-Shirt featuring sweat-wicking technology and a breathable mesh back.",
+      "Stay cool and dry with advanced moisture-wicking technology.",
     price: 35.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/PRO+DRI-FIT+TEE.png",
+    imageUrl: "/products/photos/pro-dri-fit-tee.jpg",
     category: "Clothing",
   },
   {
     name: "Nike Heritage86 Cap",
     description:
-      "A classic six-panel silhouette with an adjustable back closure for a custom fit. The iconic Swoosh is embroidered on the front.",
+      "Classic six-panel design with iconic Swoosh embroidery.",
     price: 28.0,
-    imageUrl: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/350e7f3a-979a-402d-9efb-be84af0e5e4c/HERITAGE86+CAP.png",
+    imageUrl: "/products/photos/heritage86-cap.jpg",
     category: "Accessories",
   },
 ];

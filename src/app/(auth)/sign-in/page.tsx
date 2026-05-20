@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function SignInPage() {
   return (
-    <main className="rounded-2xl border border-zinc-200 bg-white px-6 py-8 shadow-lg sm:px-10 sm:py-10">
+    <main className="rounded-[2rem] border border-white/10 bg-white/[0.05] px-6 py-8 text-white shadow-2xl shadow-black/20 backdrop-blur sm:px-10 sm:py-10">
       <div className="space-y-4">
-        <p className="text-sm font-medium uppercase tracking-wider text-zinc-500">Welcome back</p>
-        <h1 className="text-4xl font-bold text-zinc-900">Sign in to your account</h1>
-        <p className="max-w-xl text-base text-zinc-600">
+        <p className="text-sm font-semibold uppercase tracking-[0.32em] text-orange-400">Welcome back</p>
+        <h1 className="text-4xl font-black tracking-[-0.04em] text-white">Sign in to your account</h1>
+        <p className="max-w-xl text-base leading-7 text-zinc-300">
           Access your membership, manage orders, and explore the latest Nike drops from one secure place.
         </p>
       </div>
@@ -24,17 +24,17 @@ export default function SignInPage() {
       </div>
 
       <div className="relative my-8">
-        <div className="absolute inset-x-0 top-1/2 h-px bg-zinc-200" />
-        <span className="relative mx-auto inline-flex bg-white px-3 text-sm text-zinc-500">Or continue with email</span>
+        <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
+        <span className="relative mx-auto inline-flex bg-[#0c0c0c] px-3 text-sm text-zinc-400">Or continue with email</span>
       </div>
 
       <AuthForm mode="sign-in" />
 
-      <p className="mt-6 text-center text-sm text-zinc-500">
+      <p className="mt-6 text-center text-sm text-zinc-400">
         New to Nike?{' '}
         <Link
           href="/sign-up"
-          className="font-medium text-zinc-900 underline decoration-zinc-300 decoration-2 underline-offset-4 hover:text-zinc-800"
+          className="font-medium text-white underline decoration-white/30 decoration-2 underline-offset-4 hover:text-orange-300"
         >
           Create an account
         </Link>

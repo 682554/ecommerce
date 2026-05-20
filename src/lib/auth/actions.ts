@@ -1,11 +1,10 @@
 "use server";
 
 import { db } from "@/db";
-import { user, account, session, guest } from "@/db/schema";
+import { user, account, session, guest } from "@/db/schema/index";
 import { eq, and } from "drizzle-orm";
-import { signUpSchema, signInSchema, type SignUpInput, type SignInInput } from "./validation";
+import { signUpSchema, signInSchema } from "./validation";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import crypto from "crypto";
 
 // Hash password using crypto (in production, use bcrypt)
@@ -22,7 +21,7 @@ export async function createGuestSession() {
     const sessionToken = crypto.randomUUID();
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-    const [newGuest] = await db
+    await db
       .insert(guest)
       .values({
         sessionToken,

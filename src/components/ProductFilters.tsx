@@ -20,8 +20,8 @@ export function ProductFilters() {
               onClick={() => setSelectedCategory(cat === "All" ? null : cat)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                  ? "bg-white text-black hover:bg-neutral-100"
+                  : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700 border border-neutral-700"
               }`}
             >
               {cat}
@@ -34,7 +34,7 @@ export function ProductFilters() {
         placeholder="Search products..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm text-zinc-900 placeholder-zinc-400 outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 sm:w-64"
+        className="w-full rounded-full border border-neutral-700 bg-neutral-900 px-4 py-2 text-sm text-white placeholder-neutral-500 outline-none focus:border-white focus:ring-1 focus:ring-white sm:w-64"
       />
     </div>
   );

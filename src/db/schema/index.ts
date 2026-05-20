@@ -4,6 +4,6 @@ export * from "./session";
 export * from "./account";
 export * from "./verification";
 export * from "./guest";
-
-// Product schema
 export * from "./products";
+
+ 

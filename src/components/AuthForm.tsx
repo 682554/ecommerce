@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUp, signIn } from "@/lib/auth";
+import { signUp, signIn } from "@/lib/auth/actions";
 
 type AuthFormProps = {
   mode: "sign-in" | "sign-up";
@@ -71,14 +71,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
       {error && (
-        <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-100">
           {error}
         </div>
       )}
 
       {mode === "sign-up" ? (
         <div>
-          <label htmlFor="full-name" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="full-name" className="block text-sm font-medium text-zinc-200">
             Full name
           </label>
           <input
@@ -87,7 +87,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             type="text"
             autoComplete="name"
             placeholder="Enter your full name"
-            className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
+            className="mt-2 w-full rounded-full border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50"
             required
             disabled={isLoading}
           />
@@ -95,7 +95,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
       ) : null}
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-zinc-700">
+        <label htmlFor="email" className="block text-sm font-medium text-zinc-200">
           Email
         </label>
         <input
@@ -104,7 +104,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           type="email"
           autoComplete="email"
           placeholder="name@domain.com"
-          className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
+          className="mt-2 w-full rounded-full border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50"
           required
           disabled={isLoading}
         />
@@ -112,11 +112,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
       <div>
         <div className="flex items-center justify-between gap-4">
-          <label htmlFor="password" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="password" className="block text-sm font-medium text-zinc-200">
             Password
           </label>
           {mode === "sign-in" ? (
-            <Link href="/help" className="text-sm font-medium text-zinc-900 hover:text-zinc-800">
+            <Link href="/help" className="text-sm font-medium text-zinc-300 hover:text-orange-300">
               Forgot password?
             </Link>
           ) : null}
@@ -127,7 +127,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           type="password"
           autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
           placeholder="Minimum 8 characters"
-          className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
+          className="mt-2 w-full rounded-full border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50"
           required
           minLength={8}
           disabled={isLoading}
@@ -136,7 +136,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
       {mode === "sign-up" ? (
         <div>
-          <label htmlFor="confirm-password" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="confirm-password" className="block text-sm font-medium text-zinc-200">
             Confirm password
           </label>
           <input
@@ -145,7 +145,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             type="password"
             autoComplete="new-password"
             placeholder="Confirm your password"
-            className="mt-2 w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-green-100 disabled:opacity-50"
+            className="mt-2 w-full rounded-full border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50"
             required
             minLength={8}
             disabled={isLoading}
@@ -156,19 +156,19 @@ export default function AuthForm({ mode }: AuthFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="inline-flex w-full items-center justify-center rounded-full bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-orange-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isLoading ? "Loading..." : config.submit}
       </button>
 
       {mode === "sign-up" ? (
-        <p className="text-center text-sm text-zinc-500">
+        <p className="text-center text-sm text-zinc-400">
           By creating an account, you agree to our{' '}
-          <Link href="/terms-of-service" className="font-medium text-zinc-900 hover:text-zinc-800">
+          <Link href="/terms-of-service" className="font-medium text-white hover:text-orange-300">
             Terms of Service
           </Link>{' '}
           and{' '}
-          <Link href="/privacy-policy" className="font-medium text-zinc-900 hover:text-zinc-800">
+          <Link href="/privacy-policy" className="font-medium text-white hover:text-orange-300">
             Privacy Policy
           </Link>
           .

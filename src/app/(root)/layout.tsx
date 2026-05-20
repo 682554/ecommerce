@@ -1,13 +1,6 @@
+// This layout is no longer needed as the root page.tsx handles everything
 import type { ReactNode } from "react";
-import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
 
 export default function RootRouteLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </>
-  );
+  return <>{children}</>;
 }

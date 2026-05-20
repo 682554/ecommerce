@@ -36,7 +36,7 @@ export default function SocialProviders() {
         <button
           key={provider.name}
           type="button"
-          className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-full border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
+          className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-4 text-sm font-semibold text-zinc-100 shadow-sm transition hover:border-white/20 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
           aria-label={provider.label}
         >
           <span className="inline-flex h-5 w-5 items-center justify-center text-current">{provider.icon}</span>

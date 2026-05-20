@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 interface FooterColumn {
@@ -46,17 +45,9 @@ const columns: FooterColumn[] = [
 ];
 
 const socialLinks = [
-  { name: "X", icon: "/icons/x.svg", href: "https://x.com/nike" },
-  {
-    name: "Facebook",
-    icon: "/icons/facebook.svg",
-    href: "https://facebook.com/nike",
-  },
-  {
-    name: "Instagram",
-    icon: "/icons/instagram.svg",
-    href: "https://instagram.com/nike",
-  },
+  { name: "X", label: "X", href: "https://x.com/nike" },
+  { name: "Facebook", label: "Fb", href: "https://facebook.com/nike" },
+  { name: "Instagram", label: "Ig", href: "https://instagram.com/nike" },
 ];
 
 const bottomLinks = [
@@ -68,24 +59,34 @@ const bottomLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-zinc-900 text-zinc-400" role="contentinfo">
-      {/* Main Footer Content */}
+    <footer className="border-t border-white/10 bg-black/80" role="contentinfo">
       <div className="mx-auto max-w-7xl px-6 pb-8 pt-12">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
-          {/* Logo */}
           <div className="shrink-0">
             <Link href="/" aria-label="Nike Home">
-              <Image
-                src="/nike-logo.svg"
-                alt="Nike"
-                width={60}
-                height={22}
-                className="invert"
-              />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white">
+                <svg
+                  viewBox="0 0 40 40"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-black"
+                >
+                  <path
+                    d="M8 20L16 28L32 12"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             </Link>
+            <p className="mt-4 max-w-xs text-sm leading-6 text-neutral-400">
+              Built for motion, styled for the street, and now presented with a
+              more polished storefront rhythm.
+            </p>
           </div>
 
-          {/* Link Columns */}
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {columns.map((column) => (
               <div key={column.title}>
@@ -97,7 +98,7 @@ export function Footer() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm transition-colors hover:text-white"
+                        className="text-sm text-neutral-300 transition-colors hover:text-white"
                       >
                         {link.label}
                       </Link>
@@ -107,58 +108,43 @@ export function Footer() {
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Social Icons */}
-          <div className="flex items-start gap-3">
-            {socialLinks.map((social) => (
+        <div className="mt-12 flex items-center justify-between border-t border-neutral-800 pt-8">
+          <div className="flex gap-4">
+            {socialLinks.map((link) => (
               <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.name}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 transition-colors hover:text-white"
+                key={link.name}
+                href={link.href}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-sm font-semibold text-white/60 transition-colors hover:border-white/25 hover:text-white"
+                aria-label={link.name}
               >
-                <Image
-                  src={social.icon}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="invert opacity-70 transition-opacity hover:opacity-100"
-                  aria-hidden="true"
-                />
+                {link.label}
               </a>
             ))}
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-neutral-400">
+            <span>Global</span>
+            <span>Shipping-ready</span>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-zinc-800">
-        <div className="mx-auto flex max-w-7xl flex-col items-start gap-4 px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
-          {/* Location & Copyright */}
-          <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500">
-            <span className="flex items-center gap-1">
-              <Image
-                src="/icons/location.svg"
-                alt=""
-                width={14}
-                height={14}
-                className="invert opacity-60"
-                aria-hidden="true"
-              />
-              Croatia
-            </span>
-            <span>&copy; {new Date().getFullYear()} Nike, Inc. All Rights Reserved</span>
+      <div className="border-t border-neutral-800 bg-neutral-950/50 px-6 py-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-4 text-center text-sm text-neutral-400">
+            © 2026 Nike, Inc. All Rights Reserved
           </div>
-
-          {/* Bottom Links */}
-          <ul className="flex flex-wrap items-center gap-4" role="list">
+          <ul
+            className="flex flex-wrap justify-center gap-6 text-sm text-neutral-400"
+            role="list"
+          >
             {bottomLinks.map((link) => (
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className="text-xs text-zinc-500 transition-colors hover:text-white"
+                  className="transition-colors hover:text-white"
                 >
                   {link.label}
                 </Link>

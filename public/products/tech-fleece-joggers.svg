@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)" />
+  <rect x="205" y="130" width="790" height="720" rx="42" fill="#ffffff" opacity="0.06" />
+  <path d="M437 242h94l42 181 26 278-64 286h-88l31-272-41-210-41 210 31 272h-88l-64-286 26-278 42-181h94z" fill="#e5e7eb"/>
+  <path d="M514 242h172l20 86H494z" fill="#cbd5e1"/>
+  <text x="88" y="140" fill="#fff" font-family="Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="12">NIKE</text>
+  <text x="88" y="995" fill="#fff" font-family="Arial, sans-serif" font-size="88" font-weight="700">Tech Fleece Joggers</text>
+  <text x="88" y="1066" fill="#fff" opacity="0.8" font-family="Arial, sans-serif" font-size="34" letter-spacing="7">ENGINEERED FOR LIGHTWEIGHT WARMTH</text>
+</svg>
