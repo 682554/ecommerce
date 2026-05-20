@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { eq } from "drizzle-orm";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { ProductFilters } from "@/components/ProductFilters";
@@ -9,7 +10,65 @@ import { products } from "@/db/schema";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const allProducts = await db.select().from(products);
+  const catalogProducts = await db.query.products.findMany({
+    where: eq(products.isPublished, true),
+    with: {
+      category: true,
+      variants: {
+        with: {
+          color: true,
+          images: true,
+        },
+      },
+      defaultVariant: {
+        with: {
+          images: true,
+        },
+      },
+      images: true,
+    },
+  });
+
+  const allProducts = catalogProducts.map((product) => {
+    const variantImages = product.variants
+      .map((variant) => {
+        const primaryImage =
+          variant.images.find((image) => image.isPrimary) ?? variant.images[0];
+
+        if (!primaryImage) {
+          return null;
+        }
+
+        return {
+          url: primaryImage.url,
+          color: variant.color.name,
+        };
+      })
+      .filter((entry): entry is { url: string; color: string } => entry !== null);
+
+    const fallbackImage =
+      product.defaultVariant?.images.find((image) => image.isPrimary)?.url ??
+      product.defaultVariant?.images[0]?.url ??
+      product.images.find((image) => image.isPrimary)?.url ??
+      product.images[0]?.url ??
+      "/products/air-force-1.svg";
+
+    const defaultPriceSource = product.defaultVariant;
+    const resolvedPrice = Number(
+      defaultPriceSource?.salePrice ?? defaultPriceSource?.price ?? "0",
+    );
+
+    return {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: resolvedPrice,
+      imageUrl: fallbackImage,
+      images: variantImages,
+      category: product.category.name,
+      createdAt: product.createdAt,
+    };
+  });
   const heroProducts = allProducts.slice(0, 3);
   const featuredProducts = allProducts.slice(0, 4);
   const categories = Array.from(

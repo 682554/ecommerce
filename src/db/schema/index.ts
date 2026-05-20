@@ -1,9 +1,1 @@
-// Auth schemas
-export * from "./user";
-export * from "./session";
-export * from "./account";
-export * from "./verification";
-export * from "./guest";
-export * from "./products";
-
- 
+export * from "@/lib/db/schema";
