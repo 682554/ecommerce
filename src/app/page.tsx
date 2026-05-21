@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
@@ -96,18 +97,18 @@ export default async function Home() {
               </p>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <a
-                  href="#products"
+                <Link
+                  href="/products"
                   className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
                 >
                   Shop the collection
-                </a>
-                <a
-                  href="#featured"
+                </Link>
+                <Link
+                  href="/products?sort=newest"
                   className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
                 >
-                  Explore featured picks
-                </a>
+                  Explore latest arrivals
+                </Link>
               </div>
 
               <div className="mt-10 grid gap-4 sm:grid-cols-3">

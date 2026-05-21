@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 
 const navLinks = [
-  { label: "Men", href: "/men" },
-  { label: "Women", href: "/women" },
-  { label: "Kids", href: "/kids" },
-  { label: "Collections", href: "/collections" },
+  { label: "Men", href: "/products?gender=men" },
+  { label: "Women", href: "/products?gender=women" },
+  { label: "Kids", href: "/products?gender=kids" },
+  { label: "Collections", href: "/products?sort=featured" },
   { label: "Contact", href: "/contact" },
 ];
 
