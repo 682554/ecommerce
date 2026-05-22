@@ -292,7 +292,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                     <Card
                       key={product.id}
                       product={{
-                        slug: product.slug,
+                        id: product.id,
                         name: product.name,
                         description: product.description,
                         category: product.category,

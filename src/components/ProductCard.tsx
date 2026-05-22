@@ -10,8 +10,7 @@ interface ProductImage {
 }
 
 interface Product {
-  id?: string;
-  slug: string;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -86,11 +85,11 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div
       className="group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-2xl hover:shadow-black/30 focus-within:ring-2 focus-within:ring-orange-400/60"
-      onClick={() => router.push(`/products/${product.slug}`)}
+      onClick={() => router.push(`/products/${product.id}`)}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          router.push(`/products/${product.slug}`);
+          router.push(`/products/${product.id}`);
         }
       }}
       role="link"

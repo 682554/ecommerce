@@ -3,12 +3,18 @@
 import Image from "next/image";
 import { Check, ChevronLeft, ChevronRight, ImageOff } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import type { ProductColorVariant } from "@/lib/data/product-details";
+
+export type ProductGalleryColor = {
+  id: string;
+  label: string;
+  swatchClassName: string;
+  images: string[];
+};
 
 type ProductGalleryProps = {
   productName: string;
   fallbackImages: string[];
-  colors: ProductColorVariant[];
+  colors: ProductGalleryColor[];
 };
 
 function uniqueImages(images: string[]) {

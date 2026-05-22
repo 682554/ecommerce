@@ -4,13 +4,35 @@ import { useRef, useState } from "react";
 
 type SizePickerProps = {
   sizes: string[];
+  selectedSize?: string | null;
+  onSelectSize?: (size: string) => void;
+  disabledSizes?: string[];
 };
 
-export function SizePicker({ sizes }: SizePickerProps) {
-  const [selectedSize, setSelectedSize] = useState<string | null>(
+export function SizePicker({
+  sizes,
+  selectedSize: controlledSize,
+  onSelectSize,
+  disabledSizes = [],
+}: SizePickerProps) {
+  const [uncontrolledSize, setUncontrolledSize] = useState<string | null>(
     sizes[0] ?? null,
   );
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const selectedSize =
+    typeof controlledSize !== "undefined" ? controlledSize : uncontrolledSize;
+
+  const setSelectedSize = (size: string) => {
+    if (disabledSizes.includes(size)) {
+      return;
+    }
+
+    onSelectSize?.(size);
+
+    if (typeof controlledSize === "undefined") {
+      setUncontrolledSize(size);
+    }
+  };
 
   const moveFocus = (currentIndex: number, direction: "next" | "prev") => {
     if (sizes.length <= 1) {
@@ -49,6 +71,7 @@ export function SizePicker({ sizes }: SizePickerProps) {
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {sizes.map((size, index) => {
           const isActive = selectedSize === size;
+          const isDisabled = disabledSizes.includes(size);
 
           return (
             <button
@@ -59,6 +82,10 @@ export function SizePicker({ sizes }: SizePickerProps) {
               }}
               onClick={() => setSelectedSize(size)}
               onKeyDown={(event) => {
+                if (isDisabled) {
+                  return;
+                }
+
                 if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                   event.preventDefault();
                   moveFocus(index, "next");
@@ -72,9 +99,12 @@ export function SizePicker({ sizes }: SizePickerProps) {
               className={`rounded-2xl border px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 ${
                 isActive
                   ? "border-white bg-white text-black"
-                  : "border-white/12 bg-white/[0.04] text-white hover:bg-white/[0.08]"
+                  : isDisabled
+                    ? "cursor-not-allowed border-white/8 bg-white/[0.02] text-white/30"
+                    : "border-white/12 bg-white/[0.04] text-white hover:bg-white/[0.08]"
               }`}
               aria-pressed={isActive}
+              disabled={isDisabled}
             >
               {size}
             </button>

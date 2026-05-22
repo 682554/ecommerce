@@ -7,7 +7,6 @@ import { ProductFilters } from "@/components/ProductFilters";
 import { ProductList } from "@/components/ProductList";
 import { db } from "@/db";
 import { products } from "@/db/schema";
-import { deriveProductSlug } from "@/lib/utils/product-slug";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +45,6 @@ export default async function Home() {
 
     return {
       id: product.id,
-      slug: deriveProductSlug(fallbackImage, product.id),
       name: product.name,
       description: product.description,
       price: resolvedPrice,
@@ -131,7 +129,7 @@ export default async function Home() {
                 {heroProducts.map((product, index) => (
                   <Link
                     key={product.id}
-                    href={`/products/${product.slug}`}
+                    href={`/products/${product.id}`}
                     className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-950/80 ${
                       index === 0 ? "sm:col-span-2 sm:grid sm:grid-cols-[1.15fr_0.85fr]" : ""
                     } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60`}
@@ -196,7 +194,7 @@ export default async function Home() {
             {featuredProducts.map((product, index) => (
               <Link
                 key={product.id}
-                href={`/products/${product.slug}`}
+                href={`/products/${product.id}`}
                 className={`overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] backdrop-blur ${
                   index === 0 ? "xl:col-span-2 xl:grid xl:grid-cols-[1.05fr_0.95fr]" : ""
                 } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60`}

@@ -1,17 +1,17 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import { Heart, ShoppingBag, Star } from "lucide-react";
-import { notFound } from "next/navigation";
-import { Card } from "@/components/Card";
+import { Star } from "lucide-react";
 import { CollapsibleSection } from "@/components/CollapsibleSection";
 import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
+import type { ProductGalleryColor } from "@/components/ProductGallery";
 import { ProductGallery } from "@/components/ProductGallery";
-import { SizePicker } from "@/components/SizePicker";
-import {
-  getAllProductDetailIds,
-  getProductDetailById,
-  getRelatedProductCards,
-} from "@/lib/data/product-details";
+import { ProductPurchasePanel } from "@/components/ProductPurchasePanel";
+import { ProductReviewsSection } from "@/components/ProductReviewsSection";
+import { RecommendedProductsSection } from "@/components/RecommendedProductsSection";
+import { Navbar } from "@/components/Navbar";
+import { getProduct } from "@/lib/actions/product";
+
+export const dynamic = "force-dynamic";
 
 type ProductDetailPageProps = {
   params: Promise<{
@@ -19,30 +19,88 @@ type ProductDetailPageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return getAllProductDetailIds().map((id) => ({ id }));
+function formatPrice(price: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price);
 }
 
-function formatPrice(price: number) {
-  return `$${price.toFixed(2)}`;
+function ProductAsyncSectionSkeleton() {
+  return (
+    <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur sm:p-7">
+      <div className="animate-pulse space-y-4">
+        <div className="h-4 w-32 rounded-full bg-white/10" />
+        <div className="h-10 w-72 rounded-full bg-white/10" />
+        <div className="space-y-3 pt-2">
+          <div className="h-24 rounded-[1.5rem] bg-white/[0.05]" />
+          <div className="h-24 rounded-[1.5rem] bg-white/[0.05]" />
+          <div className="h-24 rounded-[1.5rem] bg-white/[0.05]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProductNotFoundState() {
+  return (
+    <>
+      <Navbar />
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 pb-16 pt-10">
+        <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] px-6 py-16 text-center backdrop-blur sm:px-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.32em] text-orange-400">
+            Product unavailable
+          </p>
+          <h1 className="mt-4 text-4xl font-black tracking-[-0.05em] text-white sm:text-5xl">
+            We couldn&apos;t find that product.
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-neutral-400 sm:text-base">
+            The item may have been removed, unpublished, or linked with an
+            outdated product ID. The rest of the storefront is still available.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              href="/products"
+              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-orange-100"
+            >
+              Browse catalog
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
+            >
+              Return home
+            </Link>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
 }
 
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { id } = await params;
-  const product = getProductDetailById(id);
+  const product = await getProduct(id);
 
   if (!product) {
-    notFound();
+    return <ProductNotFoundState />;
   }
 
-  const relatedProducts = getRelatedProductCards(product.id);
+  const galleryColors: ProductGalleryColor[] = product.variantGroups.map((group) => ({
+    id: group.id,
+    label: group.color.name,
+    swatchClassName: group.color.swatchClassName,
+    images: group.images.map((image) => image.url),
+  }));
+
+  const galleryImages = product.images.map((image) => image.url);
   const savings =
     product.compareAtPrice && product.compareAtPrice > product.price
       ? Math.round(
-          ((product.compareAtPrice - product.price) / product.compareAtPrice) *
-            100,
+          ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100,
         )
       : null;
 
@@ -65,8 +123,8 @@ export default async function ProductDetailPage({
         <section className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-start">
           <ProductGallery
             productName={product.name}
-            fallbackImages={product.gallery}
-            colors={product.colors}
+            fallbackImages={galleryImages}
+            colors={galleryColors}
           />
 
           <div className="space-y-6 lg:sticky lg:top-24">
@@ -93,11 +151,11 @@ export default async function ProductDetailPage({
                     {product.rating.toFixed(1)}
                   </span>
                   <span className="text-sm text-neutral-400">
-                    ({product.reviewCount} reviews)
+                    ({product.reviewCount} review{product.reviewCount === 1 ? "" : "s"})
                   </span>
                 </div>
                 <span className="text-sm text-neutral-500">
-                  {product.gender} / {product.category}
+                  {product.brand.name} / {product.gender.label}
                 </span>
               </div>
 
@@ -116,46 +174,34 @@ export default async function ProductDetailPage({
                 {product.description}
               </p>
 
-              <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-black/25 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
-                  Fit note
-                </p>
-                <p className="mt-3 text-sm leading-7 text-neutral-300">
-                  {product.fitNote}
-                </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-[1.25rem] border border-white/10 bg-black/25 px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
+                    Colors
+                  </p>
+                  <p className="mt-2 text-sm text-neutral-300">
+                    {product.variantGroups.length} available
+                  </p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-black/25 px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
+                    Sizes
+                  </p>
+                  <p className="mt-2 text-sm text-neutral-300">
+                    {product.sizeOptions.join(", ")}
+                  </p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-black/25 px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
+                    Category
+                  </p>
+                  <p className="mt-2 text-sm text-neutral-300">
+                    {product.category.name}
+                  </p>
+                </div>
               </div>
 
-              <div className="mt-8">
-                <SizePicker sizes={product.sizes} />
-              </div>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  className="inline-flex flex-1 items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-sm font-semibold text-black transition hover:bg-orange-100"
-                >
-                  <ShoppingBag className="h-4 w-4" />
-                  Add to bag
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center gap-3 rounded-full border border-white/12 bg-white/[0.04] px-6 py-4 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
-                >
-                  <Heart className="h-4 w-4" />
-                  Favorite
-                </button>
-              </div>
-
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {product.highlights.map((highlight) => (
-                  <div
-                    key={highlight}
-                    className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-neutral-300"
-                  >
-                    {highlight}
-                  </div>
-                ))}
-              </div>
+              <ProductPurchasePanel product={product} />
             </div>
 
             <div className="space-y-4">
@@ -174,43 +220,21 @@ export default async function ProductDetailPage({
                   ))}
                 </div>
               </CollapsibleSection>
-
-              <CollapsibleSection title="Reviews">
-                <div className="space-y-3">
-                  <p>{product.reviewsNote}</p>
-                  <div className="rounded-[1.25rem] border border-dashed border-white/10 bg-white/[0.02] px-4 py-5 text-neutral-400">
-                    Customer reviews will appear here once review persistence is connected.
-                  </div>
-                </div>
-              </CollapsibleSection>
             </div>
           </div>
         </section>
 
-        <section className="mt-16 space-y-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-400">
-                You Might Also Like
-              </p>
-              <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] text-white">
-                More Nike picks with the same premium direction.
-              </h2>
-            </div>
-            <Link
-              href="/products"
-              className="text-sm font-semibold text-white/75 transition hover:text-white"
-            >
-              Browse all products
-            </Link>
-          </div>
+        <div className="mt-16">
+          <Suspense fallback={<ProductAsyncSectionSkeleton />}>
+            <ProductReviewsSection productId={product.id} />
+          </Suspense>
+        </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {relatedProducts.map((relatedProduct) => (
-              <Card key={relatedProduct.slug} product={relatedProduct} />
-            ))}
-          </div>
-        </section>
+        <div className="mt-16">
+          <Suspense fallback={<ProductAsyncSectionSkeleton />}>
+            <RecommendedProductsSection productId={product.id} />
+          </Suspense>
+        </div>
       </main>
       <Footer />
     </>

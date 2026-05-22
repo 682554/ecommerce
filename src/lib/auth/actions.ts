@@ -6,6 +6,7 @@ import { eq, and } from "drizzle-orm";
 import { signUpSchema, signInSchema } from "./validation";
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import { mergeGuestCartWithUserCart as mergeGuestCartSnapshot } from "@/lib/actions/cart";
 
 // Hash password using crypto (in production, use bcrypt)
 function hashPassword(password: string): string {
@@ -107,6 +108,8 @@ export async function getGuestSession() {
 export async function signUp(input: unknown) {
   try {
     const validatedInput = signUpSchema.parse(input);
+    const cookieStore = await cookies();
+    const guestSessionToken = cookieStore.get("guest_session")?.value ?? null;
 
     // Check if user already exists
     const existingUser = await db
@@ -152,7 +155,6 @@ export async function signUp(input: unknown) {
     });
 
     // Set auth_session cookie
-    const cookieStore = await cookies();
     cookieStore.set("auth_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -161,8 +163,10 @@ export async function signUp(input: unknown) {
       maxAge: 7 * 24 * 60 * 60,
     });
 
-    // Clear guest session if exists
-    cookieStore.delete("guest_session");
+    if (guestSessionToken) {
+      await mergeGuestCartSnapshot(newUser.id, guestSessionToken);
+      cookieStore.delete("guest_session");
+    }
 
     return {
       success: true,
@@ -192,6 +196,8 @@ export async function signUp(input: unknown) {
 export async function signIn(input: unknown) {
   try {
     const validatedInput = signInSchema.parse(input);
+    const cookieStore = await cookies();
+    const guestSessionToken = cookieStore.get("guest_session")?.value ?? null;
 
     // Find user by email
     const [foundUser] = await db
@@ -246,7 +252,6 @@ export async function signIn(input: unknown) {
     });
 
     // Set auth_session cookie
-    const cookieStore = await cookies();
     cookieStore.set("auth_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -255,8 +260,10 @@ export async function signIn(input: unknown) {
       maxAge: 7 * 24 * 60 * 60,
     });
 
-    // Clear guest session if exists
-    cookieStore.delete("guest_session");
+    if (guestSessionToken) {
+      await mergeGuestCartSnapshot(foundUser.id, guestSessionToken);
+      cookieStore.delete("guest_session");
+    }
 
     return {
       success: true,
@@ -376,17 +383,14 @@ export async function getCurrentUser() {
  */
 export async function mergeGuestCartWithUserCart(userId: string, guestSessionToken: string) {
   try {
-    // TODO: Implement cart merging logic when cart system is built
-    // For now, this is a placeholder that demonstrates the pattern
-
-    // 1. Get guest cart items from database
-    // 2. Get user cart items from database
-    // 3. Merge items (combine quantities for duplicates)
-    // 4. Update user cart
-    // 5. Clear guest cart
-
-    // Delete guest session after merge
-    await db.delete(guest).where(eq(guest.sessionToken, guestSessionToken));
+    const result = await mergeGuestCartSnapshot(userId, guestSessionToken);
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message,
+        error: result.error,
+      };
+    }
 
     return {
       success: true,

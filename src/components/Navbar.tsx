@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { NavbarCartLink } from "./NavbarCartLink";
 
 const navLinks = [
   { label: "Men", href: "/products?gender=men" },
@@ -69,12 +70,9 @@ export function Navbar() {
             Search
           </button>
 
-          <Link
-            href="/cart"
-            className="hidden rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white md:block"
-          >
-            Cart
-          </Link>
+          <div className="hidden md:block">
+            <NavbarCartLink />
+          </div>
 
           <button
             type="button"
@@ -130,6 +128,11 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            <li>
+              <div onClick={() => setMobileMenuOpen(false)}>
+                <NavbarCartLink />
+              </div>
+            </li>
           </ul>
         </div>
       )}

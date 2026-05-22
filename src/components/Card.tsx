@@ -4,7 +4,7 @@ import { ImageOff } from "lucide-react";
 
 type CardProps = {
   product: {
-    slug: string;
+    id: string;
     name: string;
     description: string;
     category: string;
@@ -34,7 +34,7 @@ export function Card({ product }: CardProps) {
 
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={`/products/${product.id}`}
       className="group block overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-2xl hover:shadow-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60"
     >
       <article>
