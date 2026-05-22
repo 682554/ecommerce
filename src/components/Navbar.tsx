@@ -25,17 +25,14 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.06]">
               <svg
-                viewBox="0 0 40 40"
+                viewBox="0 0 64 64"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 text-white"
               >
                 <path
-                  d="M8 20L16 28L32 12"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  d="M11 37.2c8.7 1.5 18.4-.8 29.6-6.6 7.4-3.9 12.8-6.3 16.4-7.1-2 3.1-5.5 6.8-10.6 10.9C36.9 41.9 26 46 16.6 46 11.3 46 9 42.8 11 37.2Z"
+                  fill="currentColor"
                 />
               </svg>
             </div>

@@ -50,7 +50,17 @@ export const productVariants = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (table) => [index("product_variants_product_idx").on(table.productId)],
+  (table) => [
+    index("product_variants_product_idx").on(table.productId),
+    index("product_variants_product_color_idx").on(
+      table.productId,
+      table.colorId,
+    ),
+    index("product_variants_product_size_idx").on(
+      table.productId,
+      table.sizeId,
+    ),
+  ],
 );
 
 export const productImages = pgTable(
@@ -67,7 +77,13 @@ export const productImages = pgTable(
     sortOrder: integer("sort_order").notNull().default(0),
     isPrimary: boolean("is_primary").notNull().default(false),
   },
-  (table) => [index("product_images_product_idx").on(table.productId)],
+  (table) => [
+    index("product_images_product_idx").on(table.productId),
+    index("product_images_product_variant_idx").on(
+      table.productId,
+      table.variantId,
+    ),
+  ],
 );
 
 export const brandsRelations = relations(brands, ({ many }) => ({

@@ -7,10 +7,9 @@ import {
   genderOptions,
   priceRangeOptions,
   sizeOptions,
-} from "@/lib/data/mock-products";
-import {
   buildProductsUrl,
   clearAllFilters,
+  type ProductQueryState,
   parseProductQuery,
   toggleMultiValue,
 } from "@/lib/utils/query";
@@ -18,7 +17,7 @@ import {
 type FilterGroup = "gender" | "size" | "color" | "price";
 
 type FiltersProps = {
-  counts: {
+  counts?: {
     gender: Record<string, number>;
     size: Record<string, number>;
     color: Record<string, number>;
@@ -49,7 +48,7 @@ export function Filters({ counts }: FiltersProps) {
     currentState.color.length +
     currentState.price.length;
 
-  function updateQuery(nextState: ReturnType<typeof parseProductQuery>) {
+  function updateQuery(nextState: ProductQueryState) {
     router.replace(buildProductsUrl(pathname, nextState), { scroll: false });
   }
 
@@ -70,36 +69,36 @@ export function Filters({ counts }: FiltersProps) {
   const groups = [
     {
       key: "gender" as const,
-      label: "Gender",
-      options: genderOptions.map((option) => ({
-        ...option,
-        count: counts.gender[option.value] ?? 0,
-      })),
-    },
+        label: "Gender",
+        options: genderOptions.map((option) => ({
+          ...option,
+          count: counts?.gender[option.value] ?? null,
+        })),
+      },
     {
       key: "size" as const,
-      label: "Size",
-      options: sizeOptions.map((option) => ({
-        ...option,
-        count: counts.size[option.value] ?? 0,
-      })),
-    },
+        label: "Size",
+        options: sizeOptions.map((option) => ({
+          ...option,
+          count: counts?.size[option.value] ?? null,
+        })),
+      },
     {
       key: "color" as const,
-      label: "Color",
-      options: colorOptions.map((option) => ({
-        ...option,
-        count: counts.color[option.value] ?? 0,
-      })),
-    },
+        label: "Color",
+        options: colorOptions.map((option) => ({
+          ...option,
+          count: counts?.color[option.value] ?? null,
+        })),
+      },
     {
       key: "price" as const,
-      label: "Price Range",
-      options: priceRangeOptions.map((option) => ({
-        ...option,
-        count: counts.price[option.value] ?? 0,
-      })),
-    },
+        label: "Price Range",
+        options: priceRangeOptions.map((option) => ({
+          ...option,
+          count: counts?.price[option.value] ?? null,
+        })),
+      },
   ];
 
   const content = (
@@ -179,9 +178,11 @@ export function Filters({ counts }: FiltersProps) {
                           {option.label}
                         </span>
                       </span>
-                      <span className="text-xs text-neutral-500">
-                        {option.count}
-                      </span>
+                      {typeof option.count === "number" ? (
+                        <span className="text-xs text-neutral-500">
+                          {option.count}
+                        </span>
+                      ) : null}
                     </label>
                   );
                 })}

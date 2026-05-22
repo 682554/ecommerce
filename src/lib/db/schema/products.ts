@@ -44,7 +44,22 @@ export const products = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (table) => [index("products_category_idx").on(table.categoryId)],
+  (table) => [
+    index("products_category_idx").on(table.categoryId),
+    index("products_category_published_idx").on(
+      table.categoryId,
+      table.isPublished,
+    ),
+    index("products_brand_published_idx").on(table.brandId, table.isPublished),
+    index("products_gender_published_idx").on(
+      table.genderId,
+      table.isPublished,
+    ),
+    index("products_published_created_idx").on(
+      table.isPublished,
+      table.createdAt,
+    ),
+  ],
 );
 
 export const productsRelations = relations(products, ({ many, one }) => ({

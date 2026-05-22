@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 interface ProductImage {
@@ -10,6 +11,7 @@ interface ProductImage {
 
 interface Product {
   id?: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
@@ -19,6 +21,7 @@ interface Product {
 }
 
 export function ProductCard({ product }: { product: Product }) {
+  const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
@@ -81,7 +84,18 @@ export function ProductCard({ product }: { product: Product }) {
   }, [product.category, product.name]);
 
   return (
-    <div className="group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-2xl hover:shadow-black/30">
+    <div
+      className="group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-2xl hover:shadow-black/30 focus-within:ring-2 focus-within:ring-orange-400/60"
+      onClick={() => router.push(`/products/${product.slug}`)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          router.push(`/products/${product.slug}`);
+        }
+      }}
+      role="link"
+      tabIndex={0}
+    >
       <div
         className="relative mb-0 aspect-square w-full cursor-grab overflow-hidden bg-neutral-950 active:cursor-grabbing"
         onMouseDown={handleMouseDown}
@@ -108,7 +122,8 @@ export function ProductCard({ product }: { product: Product }) {
             {images.map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => {
+                onClick={(event) => {
+                  event.stopPropagation();
                   setImageError(false);
                   setCurrentImageIndex(idx);
                 }}
@@ -126,7 +141,10 @@ export function ProductCard({ product }: { product: Product }) {
         {images.length > 1 && (
           <>
             <button
-              onClick={handlePrevImage}
+              onClick={(event) => {
+                event.stopPropagation();
+                handlePrevImage();
+              }}
               className="absolute left-2 top-1/2 rounded-full bg-black/50 p-2 text-white opacity-0 transition-all hover:bg-black/80 group-hover:opacity-100"
               aria-label="Previous color"
             >
@@ -146,7 +164,10 @@ export function ProductCard({ product }: { product: Product }) {
               </svg>
             </button>
             <button
-              onClick={handleNextImage}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleNextImage();
+              }}
               className="absolute right-2 top-1/2 rounded-full bg-black/50 p-2 text-white opacity-0 transition-all hover:bg-black/80 group-hover:opacity-100"
               aria-label="Next color"
             >

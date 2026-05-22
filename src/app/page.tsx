@@ -7,6 +7,7 @@ import { ProductFilters } from "@/components/ProductFilters";
 import { ProductList } from "@/components/ProductList";
 import { db } from "@/db";
 import { products } from "@/db/schema";
+import { deriveProductSlug } from "@/lib/utils/product-slug";
 
 export const dynamic = "force-dynamic";
 
@@ -31,28 +32,12 @@ export default async function Home() {
   });
 
   const allProducts = catalogProducts.map((product) => {
-    const variantImages = product.variants
-      .map((variant) => {
-        const primaryImage =
-          variant.images.find((image) => image.isPrimary) ?? variant.images[0];
-
-        if (!primaryImage) {
-          return null;
-        }
-
-        return {
-          url: primaryImage.url,
-          color: variant.color.name,
-        };
-      })
-      .filter((entry): entry is { url: string; color: string } => entry !== null);
-
     const fallbackImage =
       product.defaultVariant?.images.find((image) => image.isPrimary)?.url ??
       product.defaultVariant?.images[0]?.url ??
       product.images.find((image) => image.isPrimary)?.url ??
       product.images[0]?.url ??
-      "/products/air-force-1.svg";
+      "/static/uploads/products/nike-air-force-1-07/01-nike-air-force-1-07.png";
 
     const defaultPriceSource = product.defaultVariant;
     const resolvedPrice = Number(
@@ -61,17 +46,19 @@ export default async function Home() {
 
     return {
       id: product.id,
+      slug: deriveProductSlug(fallbackImage, product.id),
       name: product.name,
       description: product.description,
       price: resolvedPrice,
       imageUrl: fallbackImage,
-      images: variantImages,
       category: product.category.name,
       createdAt: product.createdAt,
     };
   });
+
   const heroProducts = allProducts.slice(0, 3);
-  const featuredProducts = allProducts.slice(0, 4);
+  const featuredProducts = allProducts.slice(0, 5);
+  const landingProducts = allProducts.slice(0, 5);
   const categories = Array.from(
     new Set(allProducts.map((product) => product.category)),
   );
@@ -142,11 +129,12 @@ export default async function Home() {
               <div className="absolute -right-8 bottom-8 h-44 w-44 rounded-full bg-white/10 blur-3xl" />
               <div className="relative grid gap-4 sm:grid-cols-2">
                 {heroProducts.map((product, index) => (
-                  <article
+                  <Link
                     key={product.id}
+                    href={`/products/${product.slug}`}
                     className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-950/80 ${
                       index === 0 ? "sm:col-span-2 sm:grid sm:grid-cols-[1.15fr_0.85fr]" : ""
-                    }`}
+                    } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60`}
                   >
                     <div
                       className={`relative ${
@@ -181,7 +169,7 @@ export default async function Home() {
                         ${product.price.toFixed(2)}
                       </p>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -206,11 +194,12 @@ export default async function Home() {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {featuredProducts.map((product, index) => (
-              <article
+              <Link
                 key={product.id}
+                href={`/products/${product.slug}`}
                 className={`overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] backdrop-blur ${
                   index === 0 ? "xl:col-span-2 xl:grid xl:grid-cols-[1.05fr_0.95fr]" : ""
-                }`}
+                } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60`}
               >
                 <div
                   className={`relative ${
@@ -244,7 +233,7 @@ export default async function Home() {
                     ${product.price.toFixed(2)}
                   </p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </section>
@@ -263,7 +252,7 @@ export default async function Home() {
               </h2>
             </div>
             <p className="text-sm text-neutral-400">
-              Showing {allProducts.length} products
+              Showing {landingProducts.length} products
             </p>
           </div>
 
@@ -271,7 +260,7 @@ export default async function Home() {
             <ProductFilters />
           </div>
 
-          <ProductList products={allProducts} />
+          <ProductList products={landingProducts} />
         </section>
       </div>
       <Footer />
