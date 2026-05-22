@@ -1,4 +1,3 @@
-import { getUser } from "@/lib/auth/utils";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -26,6 +25,7 @@ export async function middleware(request: NextRequest) {
   );
 
   if (isProtectedRoute) {
+    const { getUser } = await import("@/lib/auth/utils");
     const user = await getUser();
 
     // Redirect unauthenticated users to sign-in
@@ -42,13 +42,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/checkout/:path*",
   ],
 };
