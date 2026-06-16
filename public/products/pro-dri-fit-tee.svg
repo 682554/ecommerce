@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)" />
+  <rect x="205" y="130" width="790" height="720" rx="42" fill="#ffffff" opacity="0.06" />
+  <path d="M438 272l86-70h152l86 70 67 162-111 47-46-95v386H428V386l-46 95-111-47 67-162z" fill="#e2e8f0"/>
+  <path d="M542 202h116l20 64-78 57-78-57 20-64z" fill="#cbd5e1"/>
+  <text x="88" y="140" fill="#fff" font-family="Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="12">NIKE</text>
+  <text x="88" y="995" fill="#fff" font-family="Arial, sans-serif" font-size="86" font-weight="700">Pro Dri-FIT T-Shirt</text>
+  <text x="88" y="1066" fill="#fff" opacity="0.8" font-family="Arial, sans-serif" font-size="34" letter-spacing="7">COOL. DRY. READY TO MOVE.</text>
+</svg>

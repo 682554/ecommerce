@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3f4f6" />
+      <stop offset="100%" stop-color="#d1d5db" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)" />
+  <circle cx="984" cy="208" r="162" fill="#111827" opacity="0.08" />
+  <path d="M228 708c89-32 155-48 199-48 79 0 152 27 221 81 18 14 38 21 60 21h133c39 0 58 16 58 49 0 17-7 31-20 43-13 12-28 18-46 18H607c-22 0-43-6-63-18l-114-70c-19-12-42-18-69-18-42 0-86 6-133 18l0-76z" fill="#111827"/>
+  <path d="M544 722h180" stroke="#fff" stroke-width="24" stroke-linecap="round" opacity="0.65" />
+  <text x="88" y="140" fill="#111827" font-family="Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="12">NIKE</text>
+  <text x="88" y="995" fill="#111827" font-family="Arial, sans-serif" font-size="102" font-weight="700">Air Force 1 '07</text>
+  <text x="88" y="1066" fill="#111827" opacity="0.7" font-family="Arial, sans-serif" font-size="34" letter-spacing="7">BASKETBALL ROOTS. STREET LEGEND.</text>
+</svg>
